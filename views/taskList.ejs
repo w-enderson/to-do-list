@@ -36,35 +36,41 @@
 </head>
 <body>
     <h1>Lista de Tarefas</h1>
+    <a href="/newTask">nova tarefa</a>
+
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Nome</th>
-                <th>Descrição</th>
+                <!-- <th>Descrição</th> -->
                 <th>Concluída</th>
                 <th>Prioridade</th>
-                <th>Data de Conclusão</th>
-                <th>Ações</th> <!-- Coluna para ações -->
+                <!-- <th>Data de Conclusão</th> -->
+                <!-- <th>Ações</th> Coluna para ações -->
             </tr>
         </thead>
         <tbody>
             <% tasks.forEach(task => { %>
                 <tr>
-                    <td><%= task.id %></td>
+                    <!-- <td><%= task.id %></td> -->
                     <td><%= task.name %></td>
-                    <td><%= task.description %></td>
+                    <!-- <td><%= task.description %></td> -->
                     <td><%= task.is_done ? 'Sim' : 'Não' %></td>
                     <td><%= task.priority %></td>
-                    <td><%= task.done_date ? new Date(task.done_date).toLocaleString() : 'N/A' %></td>
-                    <td>
+                    <!-- <td><%= task.done_date ? new Date(task.done_date).toLocaleString() : 'N/A' %></td> -->
+                    <!-- <td>
                         <a href="/editTask/<%= task.id %>">
                             <button class="edit-button">Editar</button>
                         </a>
-                    </td>
+                    </td> -->
                 </tr>
             <% }) %>
         </tbody>
     </table>
+
+    <div>
+        
+    </div>
 </body>
 </html>

@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Editar Tarefa</h1>
+    <a href="/newTask">nova tarefa</a>
     <form action="/editTask/<%= task.id %>" method="POST">
         <label for="name">Nome da Tarefa:</label>
         <input type="text" id="name" name="name" value="<%= task.name %>" required>
