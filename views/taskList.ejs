@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Tarefas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Concluída</th>
+                <th>Prioridade</th>
+                <th>Data de Conclusão</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% tasks.forEach(task => { %>
+                <tr>
+                    <td><%= task.id %></td>
+                    <td><%= task.name %></td>
+                    <td><%= task.description %></td>
+                    <td><%= task.is_done ? 'Sim' : 'Não' %></td>
+                    <td><%= task.priority %></td>
+                    <td><%= task.done_date ? new Date(task.done_date).toLocaleString() : 'N/A' %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

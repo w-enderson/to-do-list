@@ -11,6 +11,7 @@ class Task {
 
     insert_db(callback) {
         const doneDate = this.isDone ? new Date() : null;
+        this.isDone = this.isDone=="true" ? true : false;
 
         const insertQuery = `
             INSERT INTO tasks (name, description, is_done, priority, done_date)
@@ -24,7 +25,7 @@ class Task {
                 if (callback) callback(err);
                 return;
             }
-            console.log('Tarefa inserida com sucesso, ID:', results.insertId);
+            console.log('Tarefa inserida com sucesso, ID:');
             if (callback) callback(null, results);
         });
     }

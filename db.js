@@ -41,7 +41,7 @@ const createDatabase = (dbName, callback) => {
 
 const createTableMembros = (callback) => {
     const createTableQuery = `
-        CREATE TABLE IF NOT EXISTS membro (
+        CREATE TABLE IF NOT EXISTS members (
             id INT AUTO_INCREMENT PRIMARY KEY,
             email VARCHAR(255) NOT NULL UNIQUE,
             name VARCHAR(100) NOT NULL
@@ -49,17 +49,17 @@ const createTableMembros = (callback) => {
     `;
     connection.query(createTableQuery, (err, result) => {
         if (err) {
-            console.error('Erro ao criar tabela "membro":', err);
+            console.error('Erro ao criar tabela "members":', err);
             return;
         }
-        console.log('Tabela "membro" criada.');
+        console.log('Tabela "members" criada.');
         if (callback) callback();
     });
 };
 
 const createTableTarefas = () => {
     const createTableQuery = `
-        CREATE TABLE IF NOT EXISTS tarefa (
+        CREATE TABLE IF NOT EXISTS tasks (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(50) NOT NULL,
             description  VARCHAR(140),
@@ -72,10 +72,10 @@ const createTableTarefas = () => {
     `;
     connection.query(createTableQuery, (err, result) => {
         if (err) {
-            console.error('Erro ao criar tabela "tarefa":', err);
+            console.error('Erro ao criar tabela "tasks":', err);
             return;
         }
-        console.log('Tabela "tarefa" criada.');
+        console.log('Tabela "tasks" criada.');
     });
 };
 

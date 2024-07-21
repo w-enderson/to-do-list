@@ -8,6 +8,9 @@ const PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
 db.connect(() => {
     db.createDatabase('todo_list_db', () => {
         const selectQuery = 'SELECT * FROM membro;';
@@ -24,12 +27,28 @@ db.connect(() => {
 
 
 app.get('/', (req, res) => {
-    res.send('Todo list');
+    res.render('index');
 });
 
+app.get('/tasks', (req, res) => {
+    const selectQuery = 'SELECT * FROM tasks'; 
+
+    db.connection.query(selectQuery, (err, results) => {
+        if (err) {
+            console.error('Erro ao buscar tarefas:', err);
+            return res.status(500).send('Erro ao buscar tarefas');
+        }
+
+        res.render('taskList', { tasks: results });
+    });
+});
+
+app.get('/newtask', (req, res) => {
+    res.render('newTask');
+})
 app.post('/addTask', (req, res) => {
     const { name, desc, isDone, priority } = req.body;
-    const newtask = new Task();
+    const newtask = new Task(name, desc, isDone, priority);
     newtask.insert_db((err, result) => {
         if (err) {
             console.error('Erro ao inserir a tarefa:', err);
@@ -37,6 +56,8 @@ app.post('/addTask', (req, res) => {
             console.log('Tarefa inserida com sucesso:', result);
         }
     });
+
+    res.redirect('/tasks');
 })
 
 

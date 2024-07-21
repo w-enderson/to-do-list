@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Tarefa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            margin-top: 5px;
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Adicionar Nova Tarefa</h1>
+    <form action="/addTask" method="POST">
+        <label for="name">Nome da Tarefa:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="desc">Descrição:</label>
+        <input type="text" id="desc" name="desc" required>
+
+        <label for="isDone">Concluída:</label>
+        <input type="checkbox" id="isDone" name="isDone" value="true">
+
+        <label for="priority">Prioridade:</label>
+        <select id="priority" name="priority">
+            <option value="Baixa">Baixa</option>
+            <option value="Média">Média</option>
+            <option value="Alta">Alta</option>
+        </select>
+
+        <button type="submit">Adicionar Tarefa</button>
+    </form>
+</body>
+</html>
