@@ -21,6 +21,17 @@
         th {
             background-color: #f2f2f2;
         }
+        .edit-button {
+            padding: 5px 10px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -34,6 +45,7 @@
                 <th>Concluída</th>
                 <th>Prioridade</th>
                 <th>Data de Conclusão</th>
+                <th>Ações</th> <!-- Coluna para ações -->
             </tr>
         </thead>
         <tbody>
@@ -45,6 +57,11 @@
                     <td><%= task.is_done ? 'Sim' : 'Não' %></td>
                     <td><%= task.priority %></td>
                     <td><%= task.done_date ? new Date(task.done_date).toLocaleString() : 'N/A' %></td>
+                    <td>
+                        <a href="/editTask/<%= task.id %>">
+                            <button class="edit-button">Editar</button>
+                        </a>
+                    </td>
                 </tr>
             <% }) %>
         </tbody>

@@ -31,7 +31,8 @@ class Task {
     }
     update_db(taskId, callback) {
         const doneDate = this.isDone ? new Date() : null;
-    
+        this.isDone = this.isDone=="true" ? true : false;
+
         const updateQuery = `
             UPDATE tasks
             SET name = ?, description = ?, is_done = ?, priority = ?, done_date = ?

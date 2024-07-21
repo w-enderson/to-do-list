@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Tarefa</title>
+</head>
+<body>
+    <h1>Editar Tarefa</h1>
+    <form action="/editTask/<%= task.id %>" method="POST">
+        <label for="name">Nome da Tarefa:</label>
+        <input type="text" id="name" name="name" value="<%= task.name %>" required>
+
+        <label for="desc">Descrição:</label>
+        <input type="text" id="desc" name="desc" value="<%= task.description %>" required>
+
+        <label for="isDone">Concluída:</label>
+        <input type="checkbox" id="isDone" name="isDone" value="true" <%= task.is_done ? 'checked' : '' %> >
+
+        <label for="priority">Prioridade:</label>
+        <select id="priority" name="priority">
+            <option value="Baixa" <%= task.priority === 'Baixa' ? 'selected' : '' %>>Baixa</option>
+            <option value="Média" <%= task.priority === 'Média' ? 'selected' : '' %>>Média</option>
+            <option value="Alta" <%= task.priority === 'Alta' ? 'selected' : '' %>>Alta</option>
+        </select>
+
+        <button type="submit">Atualizar Tarefa</button>
+    </form>
+</body>
+</html>

@@ -61,6 +61,34 @@ app.post('/addTask', (req, res) => {
 })
 
 
+app.get('/editTask/:id', (req, res) => {
+    const taskId = req.params.id;
+
+    const selectQuery = 'SELECT * FROM tasks WHERE id = ?';
+    db.connection.query(selectQuery, [taskId], (err, results) => {
+        if (err) {
+            console.error('Erro ao buscar tarefa:', err);
+            return res.status(500).send('Erro ao buscar tarefa');
+        }
+        if (results.length === 0) {
+            return res.status(404).send('Tarefa não encontrada');
+        }
+        res.render('editTask', { task: results[0] });
+    });
+});
+app.post('/editTask/:id', (req, res) => {
+    const { name, desc, isDone, priority } = req.body;
+    const newtask = new Task(name, desc, isDone, priority);
+    newtask.update_db(req.params.id, (err, result) => {
+        if (err) {
+            console.error('Erro ao inserir a tarefa:', err);
+        } else {
+            console.log('Tarefa inserida com sucesso:', result);
+        }
+    });
+
+    res.redirect('/tasks');
+});
 
 app.listen(PORT, () => {
     console.log(`Server running in http://localhost:${PORT}`)
