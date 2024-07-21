@@ -1,12 +1,13 @@
 const db = require('./db');
 
 class Task {
-    constructor(name, desc, isDone, priority) {
+    constructor(name, desc, isDone, priority, memberId) {
         this.name = name;
         this.desc = desc;
         this.isDone = isDone;
         this.priority = priority;
-    };
+        this.memberId = memberId;
+    }    
 
 
     insert_db(callback) {
@@ -14,18 +15,19 @@ class Task {
         this.isDone = this.isDone=="true" ? true : false;
 
         const insertQuery = `
-            INSERT INTO tasks (name, description, is_done, priority, done_date)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO tasks (name, description, is_done, priority, done_date, idmembro)
+            VALUES (?, ?, ?, ?, ?, ?)
         `;
 
-        const values = [this.name, this.desc, this.isDone, this.priority, doneDate];
+        const values = [this.name, this.desc, this.isDone, this.priority, doneDate, this.memberId];
+
         db.connection.query(insertQuery, values, (err, results) => {
             if (err) {
                 console.error('Erro ao inserir tarefa:', err);
-                if (callback) callback(err);
+                // if (callback) callback(err);
                 return;
             }
-            console.log('Tarefa inserida com sucesso, ID:');
+            console.log('Tarefa inserida com sucesso');
             if (callback) callback(null, results);
         });
     }
@@ -35,11 +37,12 @@ class Task {
 
         const updateQuery = `
             UPDATE tasks
-            SET name = ?, description = ?, is_done = ?, priority = ?, done_date = ?
+            SET name = ?, description = ?, is_done = ?, priority = ?, done_date = ?, idmembro = ?
             WHERE id = ?
         `;
-        const values = [this.name, this.desc, this.isDone, this.priority, doneDate, taskId];
-    
+
+        const values = [this.name, this.desc, this.isDone, this.priority, doneDate, this.memberId, taskId];
+
         db.connection.query(updateQuery, values, (err, results) => {
             if (err) {
                 console.error('Erro ao atualizar tarefa:', err);

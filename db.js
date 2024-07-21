@@ -62,12 +62,12 @@ const createTableTarefas = () => {
         CREATE TABLE IF NOT EXISTS tasks (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(50) NOT NULL,
-            description  VARCHAR(140),
+            description VARCHAR(140),
             is_done BOOLEAN NOT NULL,
             done_date DATETIME,
             priority ENUM('Baixa', 'Média', 'Alta') NOT NULL DEFAULT 'Baixa',
-            idmembro INT,
-            FOREIGN KEY (idmembro) REFERENCES membro(id)
+            idmembro INT NOT NULL,
+            FOREIGN KEY (idmembro) REFERENCES members(id) ON DELETE CASCADE
         );
     `;
     connection.query(createTableQuery, (err, result) => {

@@ -32,45 +32,82 @@
         .edit-button:hover {
             background-color: #0056b3;
         }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .task-details {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+        }
+        .task-details-content {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .close-button {
+            margin-top: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>Lista de Tarefas</h1>
-    <a href="/newTask">nova tarefa</a>
+    <a href="/newTask">Nova Tarefa</a>
 
-    <table>
-        <thead>
-            <tr>
-                <!-- <th>ID</th> -->
-                <th>Nome</th>
-                <!-- <th>Descrição</th> -->
-                <th>Concluída</th>
-                <th>Prioridade</th>
-                <!-- <th>Data de Conclusão</th> -->
-                <!-- <th>Ações</th> Coluna para ações -->
-            </tr>
-        </thead>
-        <tbody>
-            <% tasks.forEach(task => { %>
-                <tr>
-                    <!-- <td><%= task.id %></td> -->
-                    <td><%= task.name %></td>
-                    <!-- <td><%= task.description %></td> -->
-                    <td><%= task.is_done ? 'Sim' : 'Não' %></td>
-                    <td><%= task.priority %></td>
-                    <!-- <td><%= task.done_date ? new Date(task.done_date).toLocaleString() : 'N/A' %></td> -->
-                    <!-- <td>
-                        <a href="/editTask/<%= task.id %>">
-                            <button class="edit-button">Editar</button>
-                        </a>
-                    </td> -->
-                </tr>
-            <% }) %>
-        </tbody>
-    </table>
-
-    <div>
-        
+    <div id="taskList">
+        <% tasks.forEach(task => { %>
+            <div class="task-item" onclick="toggleDetails('<%= task.id %>', '<%= task.name %>', '<%= task.description %>', '<%= task.is_done %>', '<%= task.priority %>', '<%= task.createdBy %>')">
+                <div><%= task.name %></div>
+                <div><%= task.memberName %></div>
+                <div><%= task.is_done ? 'Sim' : 'Não' %> | <%= task.priority %></div>
+            </div>
+        <% }) %>
     </div>
+
+    <div id="taskDetails" class="task-details">
+        <div class="task-details-content">
+            <h2 id="taskName"></h2>
+            <p id="taskDescription"></p>
+            <p id="isDone"></p>
+            <form id="deleteForm" action="" method="POST">
+                <button type="submit" class="edit-button">Excluir Tarefa</button>
+            </form>
+            <button class="close-button" onclick="closeDetails()">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(taskId, taskName, taskDescription, isDone, priority, createdBy) {
+            document.getElementById('taskName').innerText = taskName;
+            document.getElementById('taskDescription').innerText = taskDescription;
+            document.getElementById('isDone').innerText = isDone ? 'Concluída' : 'Não Concluída';
+            document.getElementById('deleteForm').action = `/deleteTask/${taskId}`;
+
+            const taskDetails = document.getElementById('taskDetails');
+            taskDetails.style.display = 'block';
+        }
+
+        function closeDetails() {
+            const taskDetails = document.getElementById('taskDetails');
+            taskDetails.style.display = 'none';
+        }
+    </script>
 </body>
 </html>
