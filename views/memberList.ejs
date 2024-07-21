@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Membros</title>
+</head>
+<body>
+    <h1>Lista de Membros</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% members.forEach(member => { %>
+                <tr>
+                    <td><%= member.id %></td>
+                    <td><%= member.name %></td>
+                    <td><%= member.email %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    <a href="/newMember">Cadastrar Novo Membro</a>
+</body>
+</html>
