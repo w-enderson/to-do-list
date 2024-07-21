@@ -26,9 +26,9 @@ db.connect(() => {
 
 function isAuthenticated(req, res, next) {
     if (req.session.user) {
-        return next(); // O usuário está autenticado, continue para a próxima rota
+        return next(); 
     }
-    res.redirect('/'); // O usuário não está autenticado, redirecione para a página de login
+    res.redirect('/'); 
 }
 
 app.get('/', (req, res) => {
@@ -47,12 +47,11 @@ app.post('/login', (req, res) => {
         }
         
         if (results.length > 0) {
-            // Se o membro existir, pegue o nome e armazene na sessão
-            const member = results[0]; // O primeiro resultado
+            const member = results[0];
             req.session.user = { username: member.name, email: member.email, id: member.id }; // Armazena o nome do membro na sessão
-            res.redirect('/home'); // Redireciona para o dashboard
+            res.redirect('/home'); 
         } else {
-            res.send('Credenciais inválidas'); // Se não encontrar, retorna mensagem de erro
+            res.send('Credenciais inválidas');
         }
     });
 });
@@ -64,16 +63,16 @@ app.get('/home', isAuthenticated, (req, res) => {
 });
 app.get('/tasks', isAuthenticated, (req, res) => {
     const selectQuery = `
-        SELECT tasks.*, members.name AS memberName
+        SELECT tasks.*, members.id AS memberId, members.name AS memberName
         FROM tasks
-        LEFT JOIN members ON tasks.idmembro = members.id
+        LEFT JOIN members ON tasks.idmembro = members.id 
     `;
     db.connection.query(selectQuery, (err, results) => {
         if (err) {
             console.error('Erro ao buscar tarefas:', err);
             return res.status(500).send('Erro ao buscar tarefas');
         }
-        res.render('taskList', { tasks: results });
+        res.render('taskList', { tasks: results, currentUserId: req.session.user.id });
     });
 });
 
@@ -126,6 +125,22 @@ app.post('/editTask/:id', isAuthenticated, (req, res) => {
 
     res.redirect('/tasks');
 });
+app.post('/updateTaskStatus/:id', isAuthenticated, (req, res) => {
+    const taskId = req.params.id;
+    const { is_done } = req.body;
+
+    const newtask = new Task('', '', is_done, '', req.session.user.id);
+    newtask.update_isdone_db(taskId, (err, result) => {
+        if (err) {
+            console.error('Erro ao atualizar o status da tarefa:', err);
+        } else {
+            console.log('Status da tarefa atualizado com sucesso:', result);
+        }
+    });
+
+    res.redirect('/tasks');
+});
+
 
 app.post('/deleteTask/:id', isAuthenticated, (req, res) => {
     const { name, desc, isDone, priority } = req.body;

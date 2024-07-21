@@ -53,6 +53,28 @@ class Task {
             if (callback) callback(null, results);
         });
     }
+    update_isdone_db(taskId, callback) {
+        this.isDone = this.isDone=="true" ? true : false;
+
+        const updateQuery = `
+            UPDATE tasks
+            SET is_done = ?
+            WHERE id = ?
+        `;
+    
+        const values = [this.isDone, taskId];
+    
+        db.connection.query(updateQuery, values, (err, results) => {
+            if (err) {
+                console.error('Erro ao atualizar tarefa:', err);
+                if (callback) callback(err);
+                return;
+            }
+            console.log('Tarefa atualizada');
+            if (callback) callback(null, results);
+        });
+    }
+    
 
     delete_db(taskId, callback) {
         const deleteQuery = 'DELETE FROM tasks WHERE id = ?';

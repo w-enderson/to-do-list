@@ -39,31 +39,13 @@
             border: 1px solid #ddd;
             margin: 5px 0;
             cursor: pointer;
+            transition: width 0.3s;
         }
         .task-details {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 20px;
-            z-index: 1000;
-        }
-        .task-details-content {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        .close-button {
-            margin-top: 10px;
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
+            display: none; /* Oculta por padrão */
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -73,40 +55,58 @@
 
     <div id="taskList">
         <% tasks.forEach(task => { %>
-            <div class="task-item" onclick="toggleDetails('<%= task.id %>', '<%= task.name %>', '<%= task.description %>', '<%= task.is_done %>', '<%= task.priority %>', '<%= task.createdBy %>')">
+            <div class="task-item" onclick="toggleDetails(this, '<%= task.id %>', '<%= task.name %>', '<%= task.description %>', '<%= task.is_done %>', '<%= task.priority %>', '<%= task.memberId %>')">
                 <div><%= task.name %></div>
                 <div><%= task.memberName %></div>
                 <div><%= task.is_done ? 'Sim' : 'Não' %> | <%= task.priority %></div>
             </div>
+            <div class="task-details" id="details-<%= task.id %>">
+                <p><strong>Descrição:</strong> <%= task.description %></p>
+                <p><strong>Status:</strong> <%= task.is_done ? 'Concluída' : 'Não Concluída' %></p>
+                
+                <% if (task.memberId === currentUserId) { %>
+                    <button class="edit-button" onclick="editTask('<%= task.id %>')">Editar</button>
+                    <button class="edit-button" onclick="deleteTask('<%= task.id %>')">Excluir</button>
+                    <form action="/updateTaskStatus/<%= task.id %>" method="POST">
+                        <input type="hidden" name="is_done" value="<%= !task.is_done %>">
+                        <button type="submit" class="edit-button">Marcar como <%= task.is_done ? 'Não Concluída' : 'Concluída' %></button>
+                    </form>
+                <% } %>
+            </div>
+            
         <% }) %>
     </div>
 
-    <div id="taskDetails" class="task-details">
-        <div class="task-details-content">
-            <h2 id="taskName"></h2>
-            <p id="taskDescription"></p>
-            <p id="isDone"></p>
-            <form id="deleteForm" action="" method="POST">
-                <button type="submit" class="edit-button">Excluir Tarefa</button>
-            </form>
-            <button class="close-button" onclick="closeDetails()">Fechar</button>
-        </div>
-    </div>
-
     <script>
-        function toggleDetails(taskId, taskName, taskDescription, isDone, priority, createdBy) {
-            document.getElementById('taskName').innerText = taskName;
-            document.getElementById('taskDescription').innerText = taskDescription;
-            document.getElementById('isDone').innerText = isDone ? 'Concluída' : 'Não Concluída';
-            document.getElementById('deleteForm').action = `/deleteTask/${taskId}`;
+        function toggleDetails(taskItem, taskId, taskName, taskDescription, isDone, priority, memberId) {
+            const detailsDiv = document.getElementById(`details-${taskId}`);
+            const isDetailsVisible = detailsDiv.style.display === 'block';
 
-            const taskDetails = document.getElementById('taskDetails');
-            taskDetails.style.display = 'block';
+            // Oculta todos os detalhes
+            const allDetails = document.querySelectorAll('.task-details');
+            allDetails.forEach(detail => detail.style.display = 'none');
+
+            // Reseta a largura de todas as tarefas
+            const allTasks = document.querySelectorAll('.task-item');
+            allTasks.forEach(task => task.style.width = 'auto');
+
+            // Se os detalhes não estavam visíveis, mostre-os e aumente a largura da tarefa
+            if (!isDetailsVisible) {
+                taskItem.style.width = 'calc(100% - 20px)'; // Aumenta a largura da tarefa
+                detailsDiv.style.display = 'block'; // Mostra os detalhes
+            }
         }
 
-        function closeDetails() {
-            const taskDetails = document.getElementById('taskDetails');
-            taskDetails.style.display = 'none';
+        function editTask(taskId) {
+            window.location.href = `/editTask/${taskId}`; // Redireciona para a página de edição da tarefa
+        }
+
+        function deleteTask(taskId) {
+            const confirmDelete = confirm("Tem certeza que deseja excluir esta tarefa?");
+            if (confirmDelete) {
+                document.getElementById('deleteForm').action = `/deleteTask/${taskId}`;
+                document.getElementById('deleteForm').submit(); // Envia o formulário para excluir a tarefa
+            }
         }
     </script>
 </body>
