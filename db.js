@@ -44,7 +44,7 @@ const createTableMembros = (callback) => {
         CREATE TABLE IF NOT EXISTS membro (
             id INT AUTO_INCREMENT PRIMARY KEY,
             email VARCHAR(255) NOT NULL UNIQUE,
-            nome VARCHAR(100) NOT NULL
+            name VARCHAR(100) NOT NULL
         );
     `;
     connection.query(createTableQuery, (err, result) => {
@@ -61,11 +61,11 @@ const createTableTarefas = () => {
     const createTableQuery = `
         CREATE TABLE IF NOT EXISTS tarefa (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            nome VARCHAR(50) NOT NULL,
-            descricao VARCHAR(140),
-            finalizada BOOLEAN NOT NULL,
-            data_termino DATETIME,
-            prioridade ENUM('Baixa', 'Média', 'Alta') NOT NULL DEFAULT 'Baixa',
+            name VARCHAR(50) NOT NULL,
+            description  VARCHAR(140),
+            is_done BOOLEAN NOT NULL,
+            done_date DATETIME,
+            priority ENUM('Baixa', 'Média', 'Alta') NOT NULL DEFAULT 'Baixa',
             idmembro INT,
             FOREIGN KEY (idmembro) REFERENCES membro(id)
         );
