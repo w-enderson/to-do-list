@@ -66,14 +66,15 @@
                 
                 <% if (task.memberId === currentUserId) { %>
                     <button class="edit-button" onclick="editTask('<%= task.id %>')">Editar</button>
-                    <button class="edit-button" onclick="deleteTask('<%= task.id %>')">Excluir</button>
+                    <form action="/deleteTask/<%= task.id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="edit-button">Excluir</button>
+                    </form>
                     <form action="/updateTaskStatus/<%= task.id %>" method="POST">
                         <input type="hidden" name="is_done" value="<%= !task.is_done %>">
                         <button type="submit" class="edit-button">Marcar como <%= task.is_done ? 'Não Concluída' : 'Concluída' %></button>
                     </form>
                 <% } %>
             </div>
-            
         <% }) %>
     </div>
 
@@ -99,14 +100,6 @@
 
         function editTask(taskId) {
             window.location.href = `/editTask/${taskId}`; // Redireciona para a página de edição da tarefa
-        }
-
-        function deleteTask(taskId) {
-            const confirmDelete = confirm("Tem certeza que deseja excluir esta tarefa?");
-            if (confirmDelete) {
-                document.getElementById('deleteForm').action = `/deleteTask/${taskId}`;
-                document.getElementById('deleteForm').submit(); // Envia o formulário para excluir a tarefa
-            }
         }
     </script>
 </body>
