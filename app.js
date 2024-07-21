@@ -81,9 +81,23 @@ app.post('/editTask/:id', (req, res) => {
     const newtask = new Task(name, desc, isDone, priority);
     newtask.update_db(req.params.id, (err, result) => {
         if (err) {
-            console.error('Erro ao inserir a tarefa:', err);
+            console.error('Erro ao atualizar a tarefa:', err);
         } else {
-            console.log('Tarefa inserida com sucesso:', result);
+            console.log('Tarefa atualizada com sucesso:', result);
+        }
+    });
+
+    res.redirect('/tasks');
+});
+
+app.post('/deleteTask/:id', (req, res) => {
+    const { name, desc, isDone, priority } = req.body;
+    const newtask = new Task(name, desc, isDone, priority);
+    newtask.delete_db(req.params.id, (err, result) => {
+        if (err) {
+            console.error('Erro ao deletar a tarefa:', err);
+        } else {
+            console.log('Tarefa deletada com sucesso:', result);
         }
     });
 
