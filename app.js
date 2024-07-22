@@ -48,7 +48,7 @@ app.post('/login', (req, res) => {
         
         if (results.length > 0) {
             const member = results[0];
-            req.session.user = { username: member.name, email: member.email, id: member.id }; // Armazena o nome do membro na sessão
+            req.session.user = { username: member.name, email: member.email, id: member.id }; 
             res.redirect('/home'); 
         } else {
             res.send('Credenciais inválidas');
@@ -56,11 +56,9 @@ app.post('/login', (req, res) => {
     });
 });
 app.get('/home', isAuthenticated, (req, res) => {
-    if (!req.session.user || !req.session.user.id) {
-        return res.redirect('/'); 
-    }
-    res.render('home', {username: req.session.user.username} ); // Exibe mensagem de boas-vindas
+    res.render('home', {username: req.session.user.username} );
 });
+
 app.get('/tasks', isAuthenticated, (req, res) => {
     const selectQuery = `
         SELECT tasks.*, members.id AS memberId, members.name AS memberName
@@ -75,11 +73,10 @@ app.get('/tasks', isAuthenticated, (req, res) => {
         res.render('taskList', { tasks: results, currentUserId: req.session.user.id });
     });
 });
-
-
 app.get('/newtask', isAuthenticated, (req, res) => {
     res.render('newTask');
 })
+
 app.post('/addTask', isAuthenticated, (req, res) => {
     const { name, desc, isDone, priority } = req.body;
 
@@ -157,18 +154,6 @@ app.post('/deleteTask/:id', isAuthenticated, (req, res) => {
 });
 
 
-app.get('/members', (req, res) => {
-    // const selectQuery = 'DROP DATABASE IF EXISTS todo_list_db; ';
-    db.connection.query(selectQuery, (err, results) => {
-        if (err) {
-            console.error('Erro ao buscar membros:', err);
-            return res.status(500).send('Erro ao buscar membros');
-        }
-        console.log(results);
-        res.render('memberList', { members: results }); // Renderiza a view memberList.ejs
-    });
-});
-
 app.get('/newMember',(req, res) => {
     res.render('newMember'); 
 });
@@ -182,7 +167,7 @@ app.post('/newMember', (req, res) => {
             return res.status(500).send('Email já existe');
         }
         console.log('Membro cadastrado com sucesso:', result);
-        res.redirect('/'); // Redireciona para a lista de membros após o cadastro
+        res.redirect('/'); 
     });
 });
 
