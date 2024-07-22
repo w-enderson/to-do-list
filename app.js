@@ -154,7 +154,7 @@ app.post('/deleteTask/:id', isAuthenticated, (req, res) => {
 });
 
 
-app.get('/newMember',(req, res) => {
+app.get('/newMember', (req, res) => {
     res.render('newMember'); 
 });
 app.post('/newMember', (req, res) => {
@@ -170,6 +170,26 @@ app.post('/newMember', (req, res) => {
         res.redirect('/'); 
     });
 });
+app.post('/removeMember', isAuthenticated, (req, res) => {
+    const memberId = req.session.user.id; 
+
+    Member.prototype.delete_db(memberId, (err, result) => {
+        if (err) {
+            console.error('Erro ao deletar membro:', err);
+            return res.status(500).send('Erro ao deletar membro');
+        }
+        console.log('Membro deletado com sucesso:', result);
+req.session.destroy(err => {
+        if (err) {
+            console.error('Erro ao destruir a sessão:', err);
+            return res.status(500).send('Erro ao fazer logout');
+        }
+        res.redirect('/'); 
+    });    
+});
+});
+
+
 
 
 

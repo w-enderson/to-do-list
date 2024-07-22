@@ -27,7 +27,7 @@ class Member {
 
     delete_db(memberId, callback) {
         const deleteQuery = 'DELETE FROM members WHERE id = ?';
-        db.connection.query(deleteQuery, [taskId], (err, results) => {
+        db.connection.query(deleteQuery, [memberId], (err, results) => {
             if (err) {
                 console.error('Erro ao deletar membro:', err);
                 if (callback) callback(err);
