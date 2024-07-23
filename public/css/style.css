@@ -1,0 +1,46 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border: none;
+    color: white;
+}
+
+body {
+    background-color: rgb(43, 33, 66);
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 30px;
+    padding: 0 20vw;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    background: #312155;
+}
+
+section {
+    margin-top: 60px;
+    padding: 0 20vw;
+}
+a {
+    text-decoration: underline;
+    color: rgb(0, 255, 0);
+
+    font-weight: 900;
+}
+
+button, input[type=submit]{
+    cursor: pointer;
+    background-color: #7dcece;
+    color: black;
+    font-weight: 600;
+}
+button:hover, input[type=submit]:hover{
+    background-color: #599494;
+
+}

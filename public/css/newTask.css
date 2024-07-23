@@ -1,0 +1,43 @@
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+input, select, button {
+    margin-top: 5px;
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 5px;
+}
+
+option, select {
+    color: black;
+}
+section > form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+select {
+    border: 1px solid #ccc; 
+    font-size: 16px; 
+    color: #333; 
+    appearance: none; 
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><polygon points="0,0 5,5 10,0" fill="%23333"/></svg>');
+    background-repeat: no-repeat; 
+    background-position: right 10px center; 
+    background-size: 10px; 
+    cursor: pointer; 
+}
+
+select:hover {
+    border-color: #4600a1; 
+}
+
+select:focus {
+    outline: none;
+    border-color: #4600a1; 
+    box-shadow: 0 0 5px rgba(114, 6, 255, 0.5); 
+}

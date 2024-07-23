@@ -4,17 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
+
 </head>
 <body>
-    <h1>Tela de Login</h1>
-    <form action="/login" method="POST">
-        <label for="email">email:</label>
-        <input type="email" id="email" name="email" required>
+    <main>
+        <h1>Tela de Login</h1>
+        <form action="/login" method="POST">
+            <input type="email" id="email" name="email" placeholder="email" required>
+    
+            <input type="submit" value="entrar">
+        </form>
+        <p>novo aqui? <a href="/newMember">cadastre-se</a> </p>
+    </main>
 
-        <button type="submit">Entrar</button>
-    </form>
-
-    <p>novo aqui?<a href="/newMember"> cadastre-se</a> </p>
     
 </body>
 </html>

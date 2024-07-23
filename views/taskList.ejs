@@ -4,59 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Tarefas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .edit-button {
-            padding: 5px 10px;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .edit-button:hover {
-            background-color: #0056b3;
-        }
-        .task-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border: 1px solid #ddd;
-            margin: 5px 0;
-            cursor: pointer;
-            transition: width 0.3s;
-        }
-        .task-details {
-            display: none; /* Oculta por padrão */
-            padding: 10px;
-            border-top: 1px solid #ddd;
-            margin-top: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/taskList.css">
+
 </head>
 <body>
     <header>
-        <h1>Lista de Tarefas</h1>
         <a href="/home">Home</a>
-        <a href="/newTask">Nova Tarefa</a>
     </header>
-
-    <div id="taskList">
+    
+    <section id="taskList">
+        <h1>Lista de Tarefas</h1>
+        <a href="/newTask">Nova Tarefa</a>
         <% tasks.forEach(task => { %>
             <div class="task-item" onclick="toggleDetails(this, '<%= task.id %>', '<%= task.name %>', '<%= task.description %>', '<%= task.is_done %>', '<%= task.priority %>', '<%= task.memberId %>')">
                 <div><%= task.name %></div>
@@ -66,44 +25,44 @@
             <div class="task-details" id="details-<%= task.id %>">
                 <p><strong>Descrição:</strong> <%= task.description %></p>
                 <p><strong>Status:</strong> <%= task.is_done ? 'Concluída' : 'Não Concluída' %></p>
-                
-                <% if (task.memberId === currentUserId) { %>
-                    <button class="edit-button" onclick="editTask('<%= task.id %>')">Editar</button>
-                    <form action="/deleteTask/<%= task.id %>" method="POST" style="display:inline;">
-                        <button type="submit" class="edit-button">Excluir</button>
-                    </form>
-                    <form action="/updateTaskStatus/<%= task.id %>" method="POST">
-                        <input type="hidden" name="is_done" value="<%= !task.is_done %>">
-                        <button type="submit" class="edit-button">Marcar como <%= task.is_done ? 'Não Concluída' : 'Concluída' %></button>
-                    </form>
+                <% if (task.is_done) { %>
+                    <p><strong>Data de conclusão:</strong> <%= task.done_date %></p>
                 <% } %>
+                <div class="task-nav">
+                    <% if (task.memberId === currentUserId) { %>
+                        <form action="/editTask/<%= task.id %>" method="get">
+                            <input type="submit" class="edit-button" value="editar">
+                        </form>
+                        <form action="/deleteTask/<%= task.id %>" method="POST">
+                            <input type="submit" class="edit-button" value="excluir">
+                        </form>
+                        <form action="/updateTaskStatus/<%= task.id %>" method="POST">
+                            <input type="hidden" name="is_done" value="<%= !task.is_done %>">
+                            <input type="submit" class="edit-button" value="Marcar como <%= task.is_done ? 'Não Concluída' : 'Concluída' %>">
+                        </form>
+                    <% } %>
+                </div>
             </div>
         <% }) %>
-    </div>
+    </section>
 
     <script>
         function toggleDetails(taskItem, taskId, taskName, taskDescription, isDone, priority, memberId) {
             const detailsDiv = document.getElementById(`details-${taskId}`);
             const isDetailsVisible = detailsDiv.style.display === 'block';
 
-            // Oculta todos os detalhes
             const allDetails = document.querySelectorAll('.task-details');
             allDetails.forEach(detail => detail.style.display = 'none');
 
-            // Reseta a largura de todas as tarefas
             const allTasks = document.querySelectorAll('.task-item');
-            allTasks.forEach(task => task.style.width = 'auto');
+            allTasks.forEach(task => task.style.backgroundColor = '');
 
-            // Se os detalhes não estavam visíveis, mostre-os e aumente a largura da tarefa
             if (!isDetailsVisible) {
-                taskItem.style.width = 'calc(100% - 20px)'; // Aumenta a largura da tarefa
-                detailsDiv.style.display = 'block'; // Mostra os detalhes
+                taskItem.style.backgroundColor = '#0056b3'; 
+                detailsDiv.style.display = 'block'; 
             }
         }
 
-        function editTask(taskId) {
-            window.location.href = `/editTask/${taskId}`; // Redireciona para a página de edição da tarefa
-        }
     </script>
 </body>
 </html>

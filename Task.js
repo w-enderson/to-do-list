@@ -54,15 +54,16 @@ class Task {
         });
     }
     update_isdone_db(taskId, callback) {
+        const doneDate = this.isDone ? new Date() : null;
         this.isDone = this.isDone=="true" ? true : false;
 
         const updateQuery = `
             UPDATE tasks
-            SET is_done = ?
+            SET is_done = ?, done_date = ?
             WHERE id = ?
         `;
     
-        const values = [this.isDone, taskId];
+        const values = [this.isDone, doneDate, taskId];
     
         db.connection.query(updateQuery, values, (err, results) => {
             if (err) {

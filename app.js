@@ -11,8 +11,10 @@ const PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
+
 app.use(session({
     secret: 'ODM32IQJE0923JE0QDX02D9J3E33',
     resave: false,
@@ -55,6 +57,7 @@ app.post('/login', (req, res) => {
         }
     });
 });
+
 app.get('/home', isAuthenticated, (req, res) => {
     res.render('home', {username: req.session.user.username} );
 });
@@ -70,9 +73,17 @@ app.get('/tasks', isAuthenticated, (req, res) => {
             console.error('Erro ao buscar tarefas:', err);
             return res.status(500).send('Erro ao buscar tarefas');
         }
+        results.forEach(task => {
+            const doneDate = new Date(task.done_date);
+            task.done_date = `${doneDate.getDate().toString().padStart(2, '0')}/${(doneDate.getMonth() + 1).toString().padStart(2, '0')}/${doneDate.getFullYear()} ${doneDate.getHours().toString().padStart(2, '0')}:${doneDate.getMinutes().toString().padStart(2, '0')}`;
+        });
+    
+        console.log(results);
+
         res.render('taskList', { tasks: results, currentUserId: req.session.user.id });
     });
 });
+
 app.get('/newtask', isAuthenticated, (req, res) => {
     res.render('newTask');
 })
@@ -96,21 +107,23 @@ app.post('/addTask', isAuthenticated, (req, res) => {
 
 app.get('/editTask/:id', isAuthenticated, (req, res) => {
     const taskId = req.params.id;
+    const memberId = req.session.user.id;
 
-    const selectQuery = 'SELECT * FROM tasks WHERE id = ?';
-    db.connection.query(selectQuery, [taskId], (err, results) => {
+    const selectQuery = 'SELECT * FROM tasks WHERE id = ? AND idmembro = ?';
+    db.connection.query(selectQuery, [taskId, memberId], (err, results) => {
         if (err) {
             console.error('Erro ao buscar tarefa:', err);
             return res.status(500).send('Erro ao buscar tarefa');
         }
         if (results.length === 0) {
-            return res.status(404).send('Tarefa não encontrada');
+            return res.status(404).send('Tarefa não encontrada ou você nao tem permissao pra acessá-la');
         }
         res.render('editTask', { task: results[0] });
     });
 });
 app.post('/editTask/:id', isAuthenticated, (req, res) => {
     const { name, desc, isDone, priority } = req.body;
+    
     const newtask = new Task(name, desc, isDone, priority, req.session.user.id);
     newtask.update_db(req.params.id, (err, result) => {
         if (err) {
@@ -140,9 +153,7 @@ app.post('/updateTaskStatus/:id', isAuthenticated, (req, res) => {
 
 
 app.post('/deleteTask/:id', isAuthenticated, (req, res) => {
-    const { name, desc, isDone, priority } = req.body;
-    const newtask = new Task(name, desc, isDone, priority, req.session.user.id);
-    newtask.delete_db(req.params.id, (err, result) => {
+    Task.prototype.delete_db(req.params.id, (err, result) => {
         if (err) {
             console.error('Erro ao deletar a tarefa:', err);
         } else {
@@ -179,19 +190,15 @@ app.post('/removeMember', isAuthenticated, (req, res) => {
             return res.status(500).send('Erro ao deletar membro');
         }
         console.log('Membro deletado com sucesso:', result);
-req.session.destroy(err => {
-        if (err) {
-            console.error('Erro ao destruir a sessão:', err);
-            return res.status(500).send('Erro ao fazer logout');
-        }
-        res.redirect('/'); 
-    });    
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Erro ao destruir a sessão:', err);
+                return res.status(500).send('Erro ao fazer logout');
+            }
+            res.redirect('/'); 
+        });    
+    });
 });
-});
-
-
-
-
 
 app.listen(PORT, () => {
     console.log(`Server running in http://localhost:${PORT}`)

@@ -4,46 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Tarefa</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        input, select, button {
-            margin-top: 5px;
-            padding: 10px;
-            width: 100%;
-            max-width: 300px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/newTask.css">
+
 </head>
 <body>
     <header>
-        <h1>Adicionar Nova Tarefa</h1>
         <a href="/home">Home</a>
     </header>
-    <form action="/addTask" method="POST">
-        <label for="name">Nome da Tarefa:</label>
-        <input type="text" id="name" name="name" minlength="5" maxlength="50" required>
+    <section>
+        <h1>Adicionar Nova Tarefa</h1>
 
-        <label for="desc">Descrição:</label>
-        <input type="text" id="desc" name="desc" maxlength="140">
-
-        <label for="isDone">Concluída:</label>
-        <input type="checkbox" id="isDone" name="isDone" value="true">
-
-        <label for="priority">Prioridade:</label>
-        <select id="priority" name="priority">
-            <option value="Baixa">Baixa</option>
-            <option value="Média">Média</option>
-            <option value="Alta">Alta</option>
-        </select>
-
-        <button type="submit">Adicionar Tarefa</button>
-    </form>
+        <form action="/addTask" method="POST">
+            <input type="text" id="name" name="name" minlength="5" maxlength="50" placeholder="Título" required>
+            <input type="text" id="desc" name="desc" maxlength="140" placeholder="Descrição">
+    
+            <label for="isDone">Concluída:</label>
+            <select id="isDone" name="isDone">
+                <option value="false" selected>não</option>
+                <option value="true">sim</option>
+            </select>    
+            <label for="priority">Prioridade:</label>
+            <select id="priority" name="priority">
+                <option value="Baixa" selected>Baixa</option>
+                <option value="Média">Média</option>
+                <option value="Alta">Alta</option>
+            </select>
+    
+            <input type="submit" value="Adicionar Tarefa">
+        </form>
+    </section>
 </body>
 </html>
