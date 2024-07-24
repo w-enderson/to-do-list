@@ -10,8 +10,13 @@ input, select, button {
     max-width: 300px;
     border-radius: 5px;
 }
-
-option, select {
+.deleteButton {
+    background: #f75050;
+}
+.deleteButton:hover {
+    background: #ec0b0b;
+}
+option, select, input {
     color: black;
 }
 section > form {

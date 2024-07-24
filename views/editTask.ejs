@@ -5,36 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Tarefa</title>
     <link rel="stylesheet" href="/css/style.css">
-
+    <link rel="stylesheet" href="/css/newTask.css">
 </head>
 <body>
     <header>
-        <h1>Editar Tarefa</h1>
         <a href="/home">Home</a>
-        <a href="/newTask">nova tarefa</a>
+        <a href="/newTask">Nova tarefa</a>
     </header>
     
-    <form action="/editTask/<%= task.id %>" method="POST">
-        <label for="name">Nome da Tarefa:</label>
-        <input type="text" id="name" name="name" value="<%= task.name %>" required>
+    <section>
+        <h1>Editar Tarefa</h1>
 
-        <label for="desc">Descrição:</label>
-        <input type="text" id="desc" name="desc" value="<%= task.description %>" required>
+        <form action="/editTask/<%= task.id %>" method="POST">
+            <input type="text" id="name" name="name" minlength="5" maxlength="50" placeholder="Título" value="<%= task.name %>" required>
+            <input type="text" id="desc" name="desc" maxlength="140" placeholder="Descrição" value="<%= task.description %>">
+    
+            <label for="isDone">Concluída:</label>
+            <select id="isDone" name="isDone">
+                <option value="false" <%= task.is_done ? 'selected' : '' %>>não</option>
+                <option value="true" <%= task.is_done ? 'selected' : '' %>>sim</option>
+            </select>    
 
-        <label for="isDone">Concluída:</label>
-        <input type="checkbox" id="isDone" name="isDone" value="true" <%= task.is_done ? 'checked' : '' %> >
-
-        <label for="priority">Prioridade:</label>
-        <select id="priority" name="priority">
-            <option value="Baixa" <%= task.priority === 'Baixa' ? 'selected' : '' %>>Baixa</option>
-            <option value="Média" <%= task.priority === 'Média' ? 'selected' : '' %>>Média</option>
-            <option value="Alta" <%= task.priority === 'Alta' ? 'selected' : '' %>>Alta</option>
-        </select>
-
-        <button type="submit">Atualizar Tarefa</button>
-    </form>
-    <form action="/deleteTask/<%= task.id %>" method="POST">
-        <button type="submit">Excluir Tarefa</button>
-    </form>
+            <label for="priority">Prioridade:</label>
+            <select id="priority" name="priority">
+                <option value="Baixa" <%= task.priority === 'Baixa' ? 'selected' : '' %>>Baixa</option>
+                <option value="Média" <%= task.priority === 'Média' ? 'selected' : '' %>>Média</option>
+                <option value="Alta" <%= task.priority === 'Alta' ? 'selected' : '' %>>Alta</option>
+            </select>
+    
+            <button type="submit">Atualizar Tarefa</button>
+        </form>
+        <form action="/deleteTask/<%= task.id %>" method="POST">
+            <button type="submit" class="deleteButton">Excluir Tarefa</button>
+        </form>
+    </section>
 </body>
 </html>

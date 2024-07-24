@@ -40,6 +40,9 @@ button, input[type=submit]{
     color: black;
     font-weight: 600;
 }
+input {
+    color: black;
+}
 button:hover, input[type=submit]:hover{
     background-color: #599494;
 
